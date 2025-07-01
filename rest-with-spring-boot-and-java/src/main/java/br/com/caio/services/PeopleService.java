@@ -9,7 +9,6 @@ import br.com.caio.repository.Peoplerepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicLong;
 import java.util.logging.Logger;
 import static br.com.caio.mapper.ObjectMapper.parseListObject;
 import static br.com.caio.mapper.ObjectMapper.parseObject;
@@ -71,7 +70,7 @@ public class PeopleService {
         return dto;
     }
 
-    public void delete(Long id){
+    public void delete(Long id) {
         logger.info("Delete one Person!");
         People entity = repository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("No records found for this Id!"));
