@@ -1,4 +1,4 @@
-package br.com.caio.unitetest.mapper.mocks;
+package br.com.caio.unittest.mapper.mocks;
 
 import java.util.ArrayList;
 import java.util.List;

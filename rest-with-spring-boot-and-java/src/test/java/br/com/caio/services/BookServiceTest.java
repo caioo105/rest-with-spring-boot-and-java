@@ -4,7 +4,7 @@ import br.com.caio.data.dto.BookDTO;
 import br.com.caio.exception.RequiredObjectIsNullException;
 import br.com.caio.model.Book;
 import br.com.caio.repository.BookRepository;
-import br.com.caio.unitetest.mapper.mocks.MockBook;
+import br.com.caio.unittest.mapper.mocks.MockBook;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;

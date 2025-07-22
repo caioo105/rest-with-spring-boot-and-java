@@ -4,7 +4,7 @@ import br.com.caio.data.dto.PeopleDTO;
 import br.com.caio.exception.RequiredObjectIsNullException;
 import br.com.caio.model.People;
 import br.com.caio.repository.Peoplerepository;
-import br.com.caio.unitetest.mapper.mocks.MockPerson;
+import br.com.caio.unittest.mapper.mocks.MockPerson;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;

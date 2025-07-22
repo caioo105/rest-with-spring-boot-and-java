@@ -1,16 +1,12 @@
-package br.com.caio.data.dto;
+package br.com.caio.integrationtests.dto;
 
-import br.com.caio.serializer.GenderSeriazable;
+
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonPropertyOrder;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import org.springframework.hateoas.RepresentationModel;
-
 import java.io.Serializable;
 import java.util.Objects;
 
-@JsonPropertyOrder({"id", "fistName", "lastName", "address", "gender"})
-public class PeopleDTO extends RepresentationModel<PeopleDTO> implements Serializable {
+public class PeopleDTO extends RepresentationModel<br.com.caio.data.dto.PeopleDTO> implements Serializable {
 
     private static final long serialVersionUID = 1;
 
@@ -23,8 +19,6 @@ public class PeopleDTO extends RepresentationModel<PeopleDTO> implements Seriali
 
     private String address;
 
-    //@JsonIgnore
-    @JsonSerialize(using = GenderSeriazable.class)
     private String gender;
 
     private Boolean enabled;

@@ -9,7 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-
+// @CrossOrigin(origins = "http://localhost:8080")
 @RestController
 @RequestMapping("/book")
 @Tag(name = "Book", description = "Endpoints for Managing Book")

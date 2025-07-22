@@ -52,6 +52,13 @@ public class PeopleController implements br.com.caio.controllers.docs.PeopleCont
         return service.update(people);
     }
 
+    @PatchMapping(value = "/{id}", produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_YAML_VALUE})
+
+    @Override
+    public PeopleDTO disablePeople(@PathVariable("id") Long id) {
+       return service.disablePeople(id);
+    }
+
     @DeleteMapping(value = "/{id}")
 
     @Override

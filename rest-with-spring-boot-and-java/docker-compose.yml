@@ -1,0 +1,25 @@
+version: '3.8'
+
+services:
+  mysql:
+    image: mysql:8.0
+    container_name: mysql-container
+    environment:
+      MYSQL_ROOT_PASSWORD: admin123
+      MYSQL_DATABASE: rest_with_spring_boot_and_java
+    ports:
+      - "3306:3306"
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  app:
+    image: rest-with-spring-boot-and-java:0.0.1-SNAPSHOT
+    container_name: springboot-app
+    ports:
+      - "8080:80" # ajuste se necessário
+    depends_on:
+      mysql:
+        condition: service_healthy

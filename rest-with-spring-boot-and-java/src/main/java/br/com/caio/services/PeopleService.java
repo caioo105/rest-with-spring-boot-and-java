@@ -8,6 +8,8 @@ import br.com.caio.model.People;
 import br.com.caio.repository.Peoplerepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import java.util.List;
 import java.util.logging.Logger;
 import static br.com.caio.mapper.ObjectMapper.parseListObject;
@@ -70,6 +72,18 @@ public class PeopleService {
         return dto;
     }
 
+    @Transactional
+    public PeopleDTO disablePeople(Long id) {
+        logger.info("Disabling one Person!");
+        repository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("No records found for this Id!"));
+        repository.disabledPeople(id);
+        var entity = repository.findById(id).get();
+        var dto = parseObject(entity, PeopleDTO.class);
+        addHateoasLinks(dto);
+        return dto;
+    }
+
     public void delete(Long id) {
         logger.info("Delete one Person!");
         People entity = repository.findById(id)
@@ -82,6 +96,7 @@ public class PeopleService {
         dto.add(linkTo(methodOn(PeopleController.class).findAll()).withRel("findAll").withType("GET"));
         dto.add(linkTo(methodOn(PeopleController.class).create(dto)).withRel("create").withType("POST"));
         dto.add(linkTo(methodOn(PeopleController.class).update(dto)).withRel("update").withType("PUT"));
+        dto.add(linkTo(methodOn(PeopleController.class).disablePeople(dto.getId())).withRel("disable").withType("PATCH"));
         dto.add(linkTo(methodOn(PeopleController.class).delete(dto.getId())).withRel("delete").withType("DELETE"));
     }
 }
