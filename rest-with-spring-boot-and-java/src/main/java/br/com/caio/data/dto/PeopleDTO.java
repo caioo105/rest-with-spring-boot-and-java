@@ -4,6 +4,7 @@ import br.com.caio.serializer.GenderSeriazable;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 import org.springframework.hateoas.RepresentationModel;
 
 import java.io.Serializable;
@@ -14,19 +15,24 @@ public class PeopleDTO extends RepresentationModel<PeopleDTO> implements Seriali
 
     private static final long serialVersionUID = 1;
 
+    @JacksonXmlProperty(localName = "id")
     private Long id;
 
     @JsonProperty("first_Name")
+    @JacksonXmlProperty(localName = "first_Name")
     private String firstName;
 
+    @JacksonXmlProperty(localName = "lastName")
     private String lastName;
 
+    @JacksonXmlProperty(localName = "address")
     private String address;
 
-    //@JsonIgnore
     @JsonSerialize(using = GenderSeriazable.class)
+    @JacksonXmlProperty(localName = "gender")
     private String gender;
 
+    @JacksonXmlProperty(localName = "enabled")
     private Boolean enabled;
 
     public PeopleDTO(){}

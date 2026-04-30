@@ -6,7 +6,6 @@ import br.com.caio.integrationtests.testcontainers.AbstractIntegrationTest;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DeserializationFeature;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import io.restassured.builder.RequestSpecBuilder;
 import io.restassured.filter.log.LogDetail;
 import io.restassured.filter.log.RequestLoggingFilter;
@@ -15,6 +14,7 @@ import io.restassured.specification.RequestSpecification;
 import org.junit.jupiter.api.*;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
+import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 
 import java.util.List;
 
@@ -24,16 +24,16 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-class PeopleControllerTest extends AbstractIntegrationTest {
+class PeopleControllerTestWithXML extends AbstractIntegrationTest {
 
     private static RequestSpecification specification;
-    private static ObjectMapper objectMapper;
+    private static XmlMapper xmlMapper;
     private static PeopleDTO people;
 
     @BeforeAll
     static void setUp() {
-        objectMapper = new ObjectMapper();
-        objectMapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
+        xmlMapper = new XmlMapper();
+        xmlMapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
         people = new PeopleDTO();
     }
 
@@ -51,8 +51,9 @@ class PeopleControllerTest extends AbstractIntegrationTest {
                 .build();
 
         var content = given(specification)
-                .contentType(MediaType.APPLICATION_JSON_VALUE)
-                .body(people)
+                .contentType(MediaType.APPLICATION_XML_VALUE)
+                .accept(MediaType.APPLICATION_XML_VALUE)
+                .body(xmlMapper.writeValueAsString(people))
                 .when()
                 .post()
                 .then()
@@ -61,7 +62,7 @@ class PeopleControllerTest extends AbstractIntegrationTest {
                 .body()
                 .asString();
 
-        PeopleDTO createdPeople = objectMapper.readValue(content, PeopleDTO.class);
+        PeopleDTO createdPeople = xmlMapper.readValue(content, PeopleDTO.class);
         people = createdPeople;
 
         assertNotNull(createdPeople.getId());
@@ -85,8 +86,9 @@ class PeopleControllerTest extends AbstractIntegrationTest {
         people.setLastName("Costa Martins");
 
         var content = given(specification)
-                .contentType(MediaType.APPLICATION_JSON_VALUE)
-                .body(people)
+                .contentType(MediaType.APPLICATION_XML_VALUE)
+                .accept(MediaType.APPLICATION_XML_VALUE)
+                .body(xmlMapper.writeValueAsString(people))
                 .when()
                 .put()
                 .then()
@@ -95,7 +97,7 @@ class PeopleControllerTest extends AbstractIntegrationTest {
                 .body()
                 .asString();
 
-        PeopleDTO createdPeople = objectMapper.readValue(content, PeopleDTO.class);
+        PeopleDTO createdPeople = xmlMapper.readValue(content, PeopleDTO.class);
         people = createdPeople;
 
         assertNotNull(createdPeople.getId());
@@ -118,7 +120,8 @@ class PeopleControllerTest extends AbstractIntegrationTest {
     void findByIdTest() throws JsonProcessingException {
 
         var content = given(specification)
-                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .contentType(MediaType.APPLICATION_XML_VALUE)
+                .accept(MediaType.APPLICATION_XML_VALUE)
                 .pathParam("id", people.getId())
                 .when()
                 .get("{id}")
@@ -128,7 +131,7 @@ class PeopleControllerTest extends AbstractIntegrationTest {
                 .body()
                 .asString();
 
-        PeopleDTO createdPeople = objectMapper.readValue(content, PeopleDTO.class);
+        PeopleDTO createdPeople = xmlMapper.readValue(content, PeopleDTO.class);
         people = createdPeople;
 
         assertNotNull(createdPeople.getId());
@@ -150,7 +153,8 @@ class PeopleControllerTest extends AbstractIntegrationTest {
     void disableTest() throws JsonProcessingException {
 
         var content = given(specification)
-                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .contentType(MediaType.APPLICATION_XML_VALUE)
+                .accept(MediaType.APPLICATION_XML_VALUE)
                 .pathParam("id", people.getId())
                 .when()
                 .patch("{id}")
@@ -160,7 +164,7 @@ class PeopleControllerTest extends AbstractIntegrationTest {
                 .body()
                 .asString();
 
-        PeopleDTO createdPeople = objectMapper.readValue(content, PeopleDTO.class);
+        PeopleDTO createdPeople = xmlMapper.readValue(content, PeopleDTO.class);
         people = createdPeople;
 
         assertNotNull(createdPeople.getId());
@@ -178,7 +182,8 @@ class PeopleControllerTest extends AbstractIntegrationTest {
     void deleteTest() throws JsonProcessingException {
 
         var content = given(specification)
-                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .contentType(MediaType.APPLICATION_XML_VALUE)
+                .accept(MediaType.APPLICATION_XML_VALUE)
                 .pathParam("id", people.getId())
                 .when()
                 .delete("{id}")
@@ -192,8 +197,9 @@ class PeopleControllerTest extends AbstractIntegrationTest {
         mockPerson();
 
         var content = given(specification)
-                .contentType(MediaType.APPLICATION_JSON_VALUE)
-                .body(people)
+                .contentType(MediaType.APPLICATION_XML_VALUE)
+                .accept(MediaType.APPLICATION_XML_VALUE)
+                .body(xmlMapper.writeValueAsString(people))
                 .when()
                 .post()
                 .then()
@@ -202,7 +208,7 @@ class PeopleControllerTest extends AbstractIntegrationTest {
                 .body()
                 .asString();
 
-        List<PeopleDTO> people = objectMapper.readValue(content, new TypeReference<List<PeopleDTO>>() {});
+        List<PeopleDTO> people = xmlMapper.readValue(content, new TypeReference<List<PeopleDTO>>() {});
 
         PeopleDTO peopleOne = people.get(0);
 
